@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMI Calculator: Loan EMI, Interest and Total Payment | India Calc Tools</title>
+  <meta name="description" content="Free EMI calculator for home, car and personal loans. Enter amount, interest rate and tenure to see your monthly EMI, total interest and total payment.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header><a href="../index.html">India Calc Tools</a></header>
+  <main>
+    <div class="card">
+      <h1>EMI Calculator</h1>
+      <label>Loan amount (₹)</label>
+      <input type="number" id="amount" value="500000" min="0" step="any">
+      <label>Interest rate (% per year)</label>
+      <input type="number" id="rate" value="9" min="0" step="any">
+      <label>Loan tenure (years)</label>
+      <input type="number" id="years" value="5" min="0" step="any">
+      <button onclick="calcEmi()">Calculate EMI</button>
+      <table id="result"></table>
+    </div>
+    <div class="card">
+      <h2>How EMI is calculated</h2>
+      <p>EMI stands for Equated Monthly Instalment, the fixed amount you pay your bank every month until the loan is cleared. It is calculated with this formula:</p>
+      <p><strong>EMI = P × r × (1 + r)<sup>n</sup> ÷ ((1 + r)<sup>n</sup> − 1)</strong></p>
+      <p>Here P is the loan amount, r is the monthly interest rate (yearly rate ÷ 12 ÷ 100), and n is the number of monthly instalments. A longer tenure gives a lower EMI but a higher total interest. This calculator gives an estimate, and your bank's final figure may differ slightly because of fees and rounding.</p>
+    </div>
+  </main>
+  <footer><a href="/about.html">About</a> | <a href="/contact.html">Contact</a> | <a href="/privacy-policy.html">Privacy Policy</a><br>&copy; 2026 India Calc Tools</footer>
+  <script>
+    function fmt(n) {
+      return "₹" + n.toLocaleString("en-IN", {maximumFractionDigits: 0});
+    }
+    function calcEmi() {
+      const P = parseFloat(document.getElementById("amount").value);
+      const annual = parseFloat(document.getElementById("rate").value);
+      const years = parseFloat(document.getElementById("years").value);
+      const table = document.getElementById("result");
+      if (isNaN(P) || isNaN(annual) || isNaN(years) || P <= 0 || annual < 0 || years <= 0) {
+        table.innerHTML = "<tr><td>Please enter valid positive numbers.</td></tr>";
+        return;
+      }
+      const n = Math.round(years * 12);
+      const r = annual / 12 / 100;
+      let emi;
+      if (r === 0) {
+        emi = P / n;
+      } else {
+        const pow = Math.pow(1 + r, n);
+        emi = P * r * pow / (pow - 1);
+      }
+      const total = emi * n;
+      const interest = total - P;
+      table.innerHTML =
+        "<tr><th>Result</th><th>Amount</th></tr>" +
+        "<tr><td>Monthly EMI</td><td>" + fmt(emi) + "</td></tr>" +
+        "<tr><td>Total interest</td><td>" + fmt(interest) + "</td></tr>" +
+        "<tr><td>Total payment</td><td>" + fmt(total) + "</td></tr>" +
+        "<tr><td>Number of instalments</td><td>" + n + "</td></tr>";
+    }
+    calcEmi();
+  </script>
+</body>
+</html>
