@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Land Area Converter: Cent, Acre, Ground, Sq Ft | India Calc Tools</title>
+  <meta name="description" content="Convert land area between cent, acre, ground, square feet, square yard, square meter and hectare instantly.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header><a href="../index.html">India Calc Tools</a></header>
+  <main>
+    <div class="card">
+      <h1>Land Area Converter</h1>
+      <label>Enter value</label>
+      <input type="number" id="value" value="1" min="0" step="any">
+      <label>From unit</label>
+      <select id="unit">
+        <option value="43560">Acre</option>
+        <option value="435.6" selected>Cent</option>
+        <option value="2400">Ground</option>
+        <option value="1">Square feet</option>
+        <option value="9">Square yard</option>
+        <option value="10.7639">Square meter</option>
+        <option value="107639">Hectare</option>
+      </select>
+      <button onclick="convert()">Convert</button>
+      <table id="result"></table>
+    </div>
+    <div class="card">
+      <h2>How to convert land area</h2>
+      <p>1 acre = 100 cents = 43,560 sq ft. 1 cent = 435.6 sq ft. 1 ground = 2,400 sq ft (common in Tamil Nadu). 1 hectare = 2.471 acres.</p>
+      <p>Enter a value, choose the unit you have, and the table shows the same area in every other unit.</p>
+    </div>
+  </main>
+  <footer>&copy; 2026 India Calc Tools</footer>
+  <script>
+    const units = [
+      ["Acre", 43560], ["Cent", 435.6], ["Ground", 2400],
+      ["Square feet", 1], ["Square yard", 9],
+      ["Square meter", 10.7639], ["Hectare", 107639]
+    ];
+    function convert() {
+      const value = parseFloat(document.getElementById("value").value);
+      const factor = parseFloat(document.getElementById("unit").value);
+      const table = document.getElementById("result");
+      if (isNaN(value) || value < 0) { table.innerHTML = "<tr><td>Please enter a valid number.</td></tr>"; return; }
+      const sqft = value * factor;
+      let html = "<tr><th>Unit</th><th>Value</th></tr>";
+      units.forEach(u => {
+        html += "<tr><td>" + u[0] + "</td><td>" + (sqft / u[1]).toLocaleString("en-IN", {maximumFractionDigits: 4}) + "</td></tr>";
+      });
+      table.innerHTML = html;
+    }
+    convert();
+  </script>
+</body>
+</html>
