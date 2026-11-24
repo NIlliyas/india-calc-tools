@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIP Calculator: Mutual Fund SIP Returns Estimate | India Calc Tools</title>
+  <meta name="description" content="Free SIP calculator. Enter monthly investment, expected return and years to estimate the future value, total invested amount and estimated gains.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header><a href="../index.html">India Calc Tools</a></header>
+  <main>
+    <div class="card">
+      <h1>SIP Calculator</h1>
+      <label>Monthly investment (₹)</label>
+      <input type="number" id="monthly" value="5000" min="0" step="any">
+      <label>Expected return (% per year)</label>
+      <input type="number" id="rate" value="12" min="0" step="any">
+      <label>Investment period (years)</label>
+      <input type="number" id="years" value="10" min="0" step="any">
+      <button type="button" onclick="calcSip()">Calculate</button>
+      <table id="result"></table>
+    </div>
+    <div class="card">
+      <h2>How SIP returns are estimated</h2>
+      <p>A SIP (Systematic Investment Plan) invests a fixed amount every month, usually in a mutual fund. This calculator estimates the future value using this formula:</p>
+      <p><strong>Future value = P × ((1 + i)<sup>n</sup> − 1) ÷ i × (1 + i)</strong></p>
+      <p>Here P is the monthly amount, i is the monthly return rate (yearly rate ÷ 12 ÷ 100), and n is the total number of months.</p>
+      <p><strong>Important:</strong> Mutual fund returns are not guaranteed and change with the market. The result is only an estimate for planning, not financial advice. Please read the scheme documents or speak to a SEBI-registered advisor before investing.</p>
+    </div>
+  </main>
+  <footer><a href="/about.html">About</a> | <a href="/contact.html">Contact</a> | <a href="/privacy-policy.html">Privacy Policy</a><br>&copy; 2026 India Calc Tools</footer>
+  <script>
+    function fmt(n) {
+      return "₹" + n.toLocaleString("en-IN", {maximumFractionDigits: 0});
+    }
+    function calcSip() {
+      const P = parseFloat(document.getElementById("monthly").value);
+      const annual = parseFloat(document.getElementById("rate").value);
+      const years = parseFloat(document.getElementById("years").value);
+      const table = document.getElementById("result");
+      if (isNaN(P) || isNaN(annual) || isNaN(years) || P <= 0 || annual < 0 || years <= 0) {
+        table.innerHTML = "<tr><td>Please enter valid positive numbers.</td></tr>";
+        return;
+      }
+      const n = Math.round(years * 12);
+      const i = annual / 12 / 100;
+      let future;
+      if (i === 0) {
+        future = P * n;
+      } else {
+        future = P * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+      }
+      const invested = P * n;
+      const gain = future - invested;
+      table.innerHTML =
+        "<tr><th>Result</th><th>Amount</th></tr>" +
+        "<tr><td>Total invested</td><td>" + fmt(invested) + "</td></tr>" +
+        "<tr><td>Estimated gains</td><td>" + fmt(gain) + "</td></tr>" +
+        "<tr><td>Estimated future value</td><td>" + fmt(future) + "</td></tr>";
+    }
+    calcSip();
+  </script>
+</body>
+</html>
