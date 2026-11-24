@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GST Calculator India: Add or Remove GST | India Calc Tools</title>
+  <meta name="description" content="Free GST calculator for India. Add GST to a price or remove GST from a GST-inclusive price, with CGST and SGST split.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header><a href="../index.html">India Calc Tools</a></header>
+  <main>
+    <div class="card">
+      <h1>GST Calculator</h1>
+      <label>Amount (₹)</label>
+      <input type="number" id="amount" value="1000" min="0" step="any">
+      <label>GST rate (%)</label>
+      <input type="number" id="rate" value="18" min="0" step="any">
+      <p>
+        <button type="button" onclick="setRate(5)">5%</button>
+        <button type="button" onclick="setRate(18)">18%</button>
+        <button type="button" onclick="setRate(40)">40%</button>
+      </p>
+      <label>What do you want to do?</label>
+      <select id="mode">
+        <option value="add">Add GST to the amount (amount is without GST)</option>
+        <option value="remove">Remove GST from the amount (amount includes GST)</option>
+      </select>
+      <button type="button" onclick="calcGst()">Calculate GST</button>
+      <table id="result"></table>
+    </div>
+    <div class="card">
+      <h2>How GST is calculated</h2>
+      <p><strong>Adding GST:</strong> GST amount = price × rate ÷ 100, and final price = price + GST amount.</p>
+      <p><strong>Removing GST:</strong> original price = GST-inclusive price × 100 ÷ (100 + rate), and GST amount = inclusive price − original price.</p>
+      <p>For sales within the same state, GST is split equally into CGST and SGST. For sales between states, the full amount is charged as IGST. GST rates can change, so please check the rate for your product or service on the official GST website before filing or billing.</p>
+    </div>
+  </main>
+  <footer><a href="/about.html">About</a> | <a href="/contact.html">Contact</a> | <a href="/privacy-policy.html">Privacy Policy</a><br>&copy; 2026 India Calc Tools</footer>
+  <script>
+    function fmt(n) {
+      return "₹" + n.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+    function setRate(r) {
+      document.getElementById("rate").value = r;
+      calcGst();
+    }
+    function calcGst() {
+      const amount = parseFloat(document.getElementById("amount").value);
+      const rate = parseFloat(document.getElementById("rate").value);
+      const mode = document.getElementById("mode").value;
+      const table = document.getElementById("result");
+      if (isNaN(amount) || isNaN(rate) || amount < 0 || rate < 0) {
+        table.innerHTML = "<tr><td>Please enter valid positive numbers.</td></tr>";
+        return;
+      }
+      let base, gst, total;
+      if (mode === "add") {
+        base = amount;
+        gst = amount * rate / 100;
+        total = amount + gst;
+      } else {
+        total = amount;
+        base = amount * 100 / (100 + rate);
+        gst = amount - base;
+      }
+      table.innerHTML =
+        "<tr><th>Result</th><th>Amount</th></tr>" +
+        "<tr><td>Price without GST</td><td>" + fmt(base) + "</td></tr>" +
+        "<tr><td>Total GST</td><td>" + fmt(gst) + "</td></tr>" +
+        "<tr><td>CGST (half)</td><td>" + fmt(gst / 2) + "</td></tr>" +
+        "<tr><td>SGST (half)</td><td>" + fmt(gst / 2) + "</td></tr>" +
+        "<tr><td>Price with GST</td><td>" + fmt(total) + "</td></tr>";
+    }
+    calcGst();
+  </script>
+</body>
+</html>
