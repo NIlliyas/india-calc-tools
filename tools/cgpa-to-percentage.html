@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CGPA to Percentage Calculator (and Percentage to CGPA) | India Calc Tools</title>
+  <meta name="description" content="Free CGPA to percentage converter. Convert CGPA to percentage using the common 9.5 formula or your own multiplier, and convert percentage back to CGPA.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header><a href="../index.html">India Calc Tools</a></header>
+  <main>
+    <div class="card">
+      <h1>CGPA to Percentage Calculator</h1>
+      <label>Your CGPA (out of 10)</label>
+      <input type="number" id="cgpa" value="8.5" min="0" max="10" step="any">
+      <label>Multiplier</label>
+      <input type="number" id="mult1" value="9.5" min="0" step="any">
+      <button type="button" onclick="cgpaToPct()">Convert to Percentage</button>
+      <table id="r1"></table>
+    </div>
+
+    <div class="card">
+      <h2>Percentage to CGPA</h2>
+      <label>Your percentage (%)</label>
+      <input type="number" id="pct" value="80.75" min="0" max="100" step="any">
+      <label>Multiplier</label>
+      <input type="number" id="mult2" value="9.5" min="0" step="any">
+      <button type="button" onclick="pctToCgpa()">Convert to CGPA</button>
+      <table id="r2"></table>
+    </div>
+
+    <div class="card">
+      <h2>How CGPA is converted to percentage</h2>
+      <p>The most common formula is <strong>Percentage = CGPA × 9.5</strong>. It is used by CBSE and by many colleges and universities in India. For example, a CGPA of 8.5 gives 8.5 × 9.5 = 80.75%.</p>
+      <p>To convert back, use <strong>CGPA = Percentage ÷ 9.5</strong>.</p>
+      <p>Not every institution uses 9.5. Some universities use a multiplier of 10, and others have their own conversion tables. If you need the result for an official form, check your university's rules or ask your college office. You can change the multiplier above to match. Your numbers are processed in your browser and are not stored.</p>
+    </div>
+  </main>
+  <footer><a href="/about.html">About</a> | <a href="/contact.html">Contact</a> | <a href="/privacy-policy.html">Privacy Policy</a><br>&copy; 2026 India Calc Tools</footer>
+  <script>
+    function fmt(n) {
+      return n.toLocaleString("en-IN", {maximumFractionDigits: 2});
+    }
+    function cgpaToPct() {
+      const c = parseFloat(document.getElementById("cgpa").value);
+      const m = parseFloat(document.getElementById("mult1").value);
+      const table = document.getElementById("r1");
+      if (isNaN(c) || isNaN(m) || c <= 0 || c > 10 || m <= 0) {
+        table.innerHTML = "<tr><td>Please enter a CGPA between 0 and 10 and a positive multiplier.</td></tr>";
+        return;
+      }
+      table.innerHTML = "<tr><th>Result</th><th>Value</th></tr>" +
+        "<tr><td>Percentage</td><td>" + fmt(c * m) + "%</td></tr>";
+    }
+    function pctToCgpa() {
+      const p = parseFloat(document.getElementById("pct").value);
+      const m = parseFloat(document.getElementById("mult2").value);
+      const table = document.getElementById("r2");
+      if (isNaN(p) || isNaN(m) || p <= 0 || p > 100 || m <= 0) {
+        table.innerHTML = "<tr><td>Please enter a percentage between 0 and 100 and a positive multiplier.</td></tr>";
+        return;
+      }
+      table.innerHTML = "<tr><th>Result</th><th>Value</th></tr>" +
+        "<tr><td>CGPA</td><td>" + fmt(p / m) + "</td></tr>";
+    }
+    cgpaToPct();
+    pctToCgpa();
+  </script>
+</body>
+</html>
