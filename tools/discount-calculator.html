@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discount Calculator: Final Price After Discount | India Calc Tools</title>
+  <meta name="description" content="Free discount calculator. Enter the original price and discount percentage, plus an optional extra discount, to see the final price and how much you save.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header><a href="../index.html">India Calc Tools</a></header>
+  <main>
+    <div class="card">
+      <h1>Discount Calculator</h1>
+      <label>Original price (₹)</label>
+      <input type="number" id="price" value="2000" min="0" step="any">
+      <label>Discount (%)</label>
+      <input type="number" id="d1" value="25" min="0" max="100" step="any">
+      <label>Extra discount or coupon (%), optional</label>
+      <input type="number" id="d2" value="10" min="0" max="100" step="any">
+      <button type="button" onclick="calcDiscount()">Calculate</button>
+      <table id="result"></table>
+    </div>
+    <div class="card">
+      <h2>How the discount is calculated</h2>
+      <p><strong>Price after discount</strong> = original price × (1 − discount ÷ 100). For example, 25% off ₹2,000 = ₹2,000 × 0.75 = ₹1,500.</p>
+      <p>If there is an extra discount, it is applied on the already reduced price, not on the original. So 25% off followed by an extra 10% off is <strong>not</strong> the same as 35% off. In the example, ₹1,500 × 0.90 = ₹1,350, which is a total saving of 32.5%.</p>
+      <p>Some shops apply extra discounts differently, so check the final bill. Your numbers are processed in your browser and are not stored.</p>
+    </div>
+  </main>
+  <footer><a href="/about.html">About</a> | <a href="/contact.html">Contact</a> | <a href="/privacy-policy.html">Privacy Policy</a><br>&copy; 2026 India Calc Tools</footer>
+  <script>
+    function fmt(n) {
+      return "₹" + n.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+    function calcDiscount() {
+      const price = parseFloat(document.getElementById("price").value);
+      const d1 = parseFloat(document.getElementById("d1").value);
+      const d2Raw = document.getElementById("d2").value;
+      const d2 = d2Raw === "" ? 0 : parseFloat(d2Raw);
+      const table = document.getElementById("result");
+      if (isNaN(price) || isNaN(d1) || isNaN(d2) || price <= 0 || d1 < 0 || d1 > 100 || d2 < 0 || d2 > 100) {
+        table.innerHTML = "<tr><td>Please enter a positive price and discounts between 0 and 100.</td></tr>";
+        return;
+      }
+      const afterFirst = price * (1 - d1 / 100);
+      const finalPrice = afterFirst * (1 - d2 / 100);
+      const saved = price - finalPrice;
+      const effective = saved / price * 100;
+      table.innerHTML =
+        "<tr><th>Result</th><th>Amount</th></tr>" +
+        "<tr><td>Price after first discount</td><td>" + fmt(afterFirst) + "</td></tr>" +
+        "<tr><td>Final price to pay</td><td>" + fmt(finalPrice) + "</td></tr>" +
+        "<tr><td>You save</td><td>" + fmt(saved) + "</td></tr>" +
+        "<tr><td>Total discount</td><td>" + effective.toLocaleString("en-IN", {maximumFractionDigits: 2}) + "%</td></tr>";
+    }
+    calcDiscount();
+  </script>
+</body>
+</html>
