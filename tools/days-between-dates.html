@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Days Between Two Dates Calculator | India Calc Tools</title>
+  <meta name="description" content="Free days between dates calculator. Find the number of days, weeks, months and weekdays between any two dates.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header><a href="../index.html">India Calc Tools</a></header>
+  <main>
+    <div class="card">
+      <h1>Days Between Two Dates Calculator</h1>
+      <label>Start date</label>
+      <input type="date" id="start">
+      <label>End date</label>
+      <input type="date" id="end">
+      <button type="button" onclick="calcDays()">Calculate</button>
+      <table id="result"></table>
+    </div>
+    <div class="card">
+      <h2>How the days between two dates are counted</h2>
+      <p>The calculator counts the number of days from the start date up to, but not including, the end date. For example, from 1 January to 2 January is 1 day. If you also want to count the end date, add 1 day to the result.</p>
+      <p>The "weekdays" figure counts Monday to Friday only. It does not remove public holidays, which differ by state and year. The months and days breakdown counts complete calendar months first, then the remaining days.</p>
+      <p>This is useful for exam countdowns, notice periods, project deadlines, loan or leave planning, and event dates. If you enter the dates in reverse order, the calculator swaps them for you. Your dates are processed in your browser and are not stored.</p>
+    </div>
+  </main>
+  <footer><a href="/about.html">About</a> | <a href="/contact.html">Contact</a> | <a href="/privacy-policy.html">Privacy Policy</a><br>&copy; 2026 India Calc Tools</footer>
+  <script>
+    function parseDate(v) {
+      const p = v.split("-");
+      return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    }
+    function fmtNum(n) {
+      return n.toLocaleString("en-IN");
+    }
+    const t = new Date();
+    document.getElementById("end").value =
+      t.getFullYear() + "-" + String(t.getMonth() + 1).padStart(2, "0") + "-" + String(t.getDate()).padStart(2, "0");
+
+    function calcDays() {
+      const sVal = document.getElementById("start").value;
+      const eVal = document.getElementById("end").value;
+      const table = document.getElementById("result");
+      if (!sVal || !eVal) {
+        table.innerHTML = "<tr><td>Please select both dates.</td></tr>";
+        return;
+      }
+      let from = parseDate(sVal);
+      let to = parseDate(eVal);
+      let note = "";
+      if (from > to) {
+        const tmp = from; from = to; to = tmp;
+        note = "<tr><td colspan=\"2\">The dates were in reverse order, so they were swapped.</td></tr>";
+      }
+      const dayMs = 86400000;
+      const totalDays = Math.round((to - from) / dayMs);
+      const weeks = Math.floor(totalDays / 7);
+      const extraDays = totalDays % 7;
+
+      let years = to.getFullYear() - from.getFullYear();
+      let months = to.getMonth() - from.getMonth();
+      let days = to.getDate() - from.getDate();
+      if (days < 0) {
+        months--;
+        days += new Date(to.getFullYear(), to.getMonth(), 0).getDate();
+      }
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      let weekdays = 0;
+      const cursor = new Date(from.getTime());
+      for (let i = 0; i < totalDays; i++) {
+        const d = cursor.getDay();
+        if (d !== 0 && d !== 6) weekdays++;
+        cursor.setDate(cursor.getDate() + 1);
+      }
+
+      table.innerHTML =
+        "<tr><th>Result</th><th>Value</th></tr>" + note +
+        "<tr><td>Total days</td><td>" + fmtNum(totalDays) + "</td></tr>" +
+        "<tr><td>Weeks and days</td><td>" + fmtNum(weeks) + " weeks, " + extraDays + " days</td></tr>" +
+        "<tr><td>Years, months, days</td><td>" + years + " years, " + months + " months, " + days + " days</td></tr>" +
+        "<tr><td>Weekdays (Mon to Fri)</td><td>" + fmtNum(weekdays) + "</td></tr>";
+    }
+  </script>
+</body>
+</html>
