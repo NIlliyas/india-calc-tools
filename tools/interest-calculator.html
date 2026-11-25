@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple and Compound Interest Calculator | India Calc Tools</title>
+  <meta name="description" content="Free simple interest and compound interest calculator. Enter principal, rate, time and compounding frequency to compare interest earned and the final amount.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header><a href="../index.html">India Calc Tools</a></header>
+  <main>
+    <div class="card">
+      <h1>Simple and Compound Interest Calculator</h1>
+      <label>Principal amount (₹)</label>
+      <input type="number" id="principal" value="100000" min="0" step="any">
+      <label>Interest rate (% per year)</label>
+      <input type="number" id="rate" value="8" min="0" step="any">
+      <label>Time (years)</label>
+      <input type="number" id="years" value="5" min="0" step="any">
+      <label>Compounding frequency</label>
+      <select id="freq">
+        <option value="1" selected>Yearly</option>
+        <option value="2">Half-yearly</option>
+        <option value="4">Quarterly</option>
+        <option value="12">Monthly</option>
+      </select>
+      <button type="button" onclick="calcInterest()">Calculate</button>
+      <table id="result"></table>
+    </div>
+    <div class="card">
+      <h2>How interest is calculated</h2>
+      <p><strong>Simple interest</strong> = P × R × T ÷ 100, where P is the principal, R is the yearly rate and T is the time in years. Interest is earned only on the original amount.</p>
+      <p><strong>Compound interest</strong> = P × (1 + R ÷ (100 × n))<sup>n × T</sup> − P, where n is how many times interest is added each year. Interest is earned on the principal and on the interest already added, so the amount grows faster over time.</p>
+      <p>The longer the time and the more often interest is compounded, the bigger the difference between the two. Banks and lenders may use different rules and rounding, so treat the result as an estimate. Your numbers are processed in your browser and are not stored.</p>
+    </div>
+  </main>
+  <footer><a href="/about.html">About</a> | <a href="/contact.html">Contact</a> | <a href="/privacy-policy.html">Privacy Policy</a><br>&copy; 2026 India Calc Tools</footer>
+  <script>
+    function fmt(n) {
+      return "₹" + n.toLocaleString("en-IN", {maximumFractionDigits: 0});
+    }
+    function calcInterest() {
+      const P = parseFloat(document.getElementById("principal").value);
+      const R = parseFloat(document.getElementById("rate").value);
+      const T = parseFloat(document.getElementById("years").value);
+      const n = parseFloat(document.getElementById("freq").value);
+      const table = document.getElementById("result");
+      if (isNaN(P) || isNaN(R) || isNaN(T) || P <= 0 || R < 0 || T <= 0) {
+        table.innerHTML = "<tr><td>Please enter valid positive numbers.</td></tr>";
+        return;
+      }
+      const simple = P * R * T / 100;
+      const compoundTotal = P * Math.pow(1 + R / (100 * n), n * T);
+      const compound = compoundTotal - P;
+      table.innerHTML =
+        "<tr><th>Result</th><th>Simple interest</th><th>Compound interest</th></tr>" +
+        "<tr><td>Interest earned</td><td>" + fmt(simple) + "</td><td>" + fmt(compound) + "</td></tr>" +
+        "<tr><td>Final amount</td><td>" + fmt(P + simple) + "</td><td>" + fmt(compoundTotal) + "</td></tr>" +
+        "<tr><td>Extra from compounding</td><td colspan=\"2\">" + fmt(compound - simple) + "</td></tr>";
+    }
+    calcInterest();
+  </script>
+</body>
+</html>
