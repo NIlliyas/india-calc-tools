@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Percentage Calculator: Find Percent, Percentage Change and More | India Calc Tools</title>
+  <meta name="description" content="Free percentage calculator. Find X% of a number, what percent one number is of another, and the percentage increase or decrease between two numbers.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header><a href="../index.html">India Calc Tools</a></header>
+  <main>
+    <div class="card">
+      <h1>Percentage Calculator</h1>
+      <p>Choose the calculator you need below.</p>
+    </div>
+
+    <div class="card">
+      <h2>1. What is X% of Y?</h2>
+      <label>Percentage (%)</label>
+      <input type="number" id="p1" value="20" step="any">
+      <label>Number</label>
+      <input type="number" id="n1" value="500" step="any">
+      <button type="button" onclick="calc1()">Calculate</button>
+      <table id="r1"></table>
+    </div>
+
+    <div class="card">
+      <h2>2. X is what percent of Y?</h2>
+      <label>Value (X)</label>
+      <input type="number" id="x2" value="50" step="any">
+      <label>Total (Y)</label>
+      <input type="number" id="y2" value="200" step="any">
+      <button type="button" onclick="calc2()">Calculate</button>
+      <table id="r2"></table>
+    </div>
+
+    <div class="card">
+      <h2>3. Percentage increase or decrease</h2>
+      <label>Old value</label>
+      <input type="number" id="old3" value="80" step="any">
+      <label>New value</label>
+      <input type="number" id="new3" value="100" step="any">
+      <button type="button" onclick="calc3()">Calculate</button>
+      <table id="r3"></table>
+    </div>
+
+    <div class="card">
+      <h2>How percentages are calculated</h2>
+      <p><strong>X% of Y</strong> = Y × X ÷ 100. For example, 20% of 500 = 500 × 20 ÷ 100 = 100.</p>
+      <p><strong>X is what percent of Y</strong> = X ÷ Y × 100. For example, 50 out of 200 = 50 ÷ 200 × 100 = 25%.</p>
+      <p><strong>Percentage change</strong> = (new value − old value) ÷ old value × 100. A positive result is an increase and a negative result is a decrease.</p>
+      <p>These are useful for exam marks, discounts, price changes, and profit or loss. Your numbers are processed in your browser and are not stored.</p>
+    </div>
+  </main>
+  <footer><a href="/about.html">About</a> | <a href="/contact.html">Contact</a> | <a href="/privacy-policy.html">Privacy Policy</a><br>&copy; 2026 India Calc Tools</footer>
+  <script>
+    function fmt(n) {
+      return n.toLocaleString("en-IN", {maximumFractionDigits: 4});
+    }
+    function getNum(id) {
+      const v = document.getElementById(id).value;
+      return v === "" ? NaN : parseFloat(v);
+    }
+    function calc1() {
+      const p = getNum("p1"), n = getNum("n1");
+      const table = document.getElementById("r1");
+      if (isNaN(p) || isNaN(n)) {
+        table.innerHTML = "<tr><td>Please enter valid numbers.</td></tr>";
+        return;
+      }
+      table.innerHTML = "<tr><th>Result</th><th>Value</th></tr>" +
+        "<tr><td>" + fmt(p) + "% of " + fmt(n) + "</td><td>" + fmt(n * p / 100) + "</td></tr>";
+    }
+    function calc2() {
+      const x = getNum("x2"), y = getNum("y2");
+      const table = document.getElementById("r2");
+      if (isNaN(x) || isNaN(y)) {
+        table.innerHTML = "<tr><td>Please enter valid numbers.</td></tr>";
+        return;
+      }
+      if (y === 0) {
+        table.innerHTML = "<tr><td>The total (Y) cannot be zero.</td></tr>";
+        return;
+      }
+      table.innerHTML = "<tr><th>Result</th><th>Value</th></tr>" +
+        "<tr><td>" + fmt(x) + " is what percent of " + fmt(y) + "</td><td>" + fmt(x / y * 100) + "%</td></tr>";
+    }
+    function calc3() {
+      const o = getNum("old3"), n = getNum("new3");
+      const table = document.getElementById("r3");
+      if (isNaN(o) || isNaN(n)) {
+        table.innerHTML = "<tr><td>Please enter valid numbers.</td></tr>";
+        return;
+      }
+      if (o === 0) {
+        table.innerHTML = "<tr><td>The old value cannot be zero.</td></tr>";
+        return;
+      }
+      const change = (n - o) / Math.abs(o) * 100;
+      const label = change > 0 ? "Increase" : (change < 0 ? "Decrease" : "No change");
+      table.innerHTML = "<tr><th>Result</th><th>Value</th></tr>" +
+        "<tr><td>" + label + "</td><td>" + fmt(Math.abs(change)) + "%</td></tr>" +
+        "<tr><td>Difference</td><td>" + fmt(n - o) + "</td></tr>";
+    }
+    calc1(); calc2(); calc3();
+  </script>
+</body>
+</html>
