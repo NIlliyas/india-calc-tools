@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator: Calculate Age in Years, Months and Days | India Calc Tools</title>
+  <meta name="description" content="Free age calculator. Enter your date of birth to find your exact age in years, months and days, total days lived, and days left until your next birthday.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header><a href="../index.html">India Calc Tools</a></header>
+  <main>
+    <div class="card">
+      <h1>Age Calculator</h1>
+      <label>Date of birth</label>
+      <input type="date" id="dob">
+      <label>Age as on (default is today)</label>
+      <input type="date" id="asof">
+      <button type="button" onclick="calcAge()">Calculate Age</button>
+      <table id="result"></table>
+    </div>
+    <div class="card">
+      <h2>How age is calculated</h2>
+      <p>Your age is the time between your date of birth and the "age as on" date. The calculator counts complete years first, then the remaining complete months, then the remaining days.</p>
+      <p>This is useful for school admissions, exam and job eligibility, and government forms that ask for your age on a specific date. Change the "age as on" date to check your age on the last date of an application. Your dates are processed in your browser and are not stored.</p>
+    </div>
+  </main>
+  <footer><a href="/about.html">About</a> | <a href="/contact.html">Contact</a> | <a href="/privacy-policy.html">Privacy Policy</a><br>&copy; 2026 India Calc Tools</footer>
+  <script>
+    function parseDate(v) {
+      const p = v.split("-");
+      return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    }
+    function fmtNum(n) {
+      return n.toLocaleString("en-IN");
+    }
+    const t = new Date();
+    document.getElementById("asof").value =
+      t.getFullYear() + "-" + String(t.getMonth() + 1).padStart(2, "0") + "-" + String(t.getDate()).padStart(2, "0");
+
+    function calcAge() {
+      const dobVal = document.getElementById("dob").value;
+      const asofVal = document.getElementById("asof").value;
+      const table = document.getElementById("result");
+      if (!dobVal || !asofVal) {
+        table.innerHTML = "<tr><td>Please select both dates.</td></tr>";
+        return;
+      }
+      const from = parseDate(dobVal);
+      const to = parseDate(asofVal);
+      if (from > to) {
+        table.innerHTML = "<tr><td>Date of birth cannot be after the 'age as on' date.</td></tr>";
+        return;
+      }
+      let years = to.getFullYear() - from.getFullYear();
+      let months = to.getMonth() - from.getMonth();
+      let days = to.getDate() - from.getDate();
+      if (days < 0) {
+        months--;
+        days += new Date(to.getFullYear(), to.getMonth(), 0).getDate();
+      }
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+      const dayMs = 86400000;
+      const totalDays = Math.round((to - from) / dayMs);
+      const totalMonths = years * 12 + months;
+      const totalWeeks = Math.floor(totalDays / 7);
+
+      let next = new Date(to.getFullYear(), from.getMonth(), from.getDate());
+      if (next < to) {
+        next = new Date(to.getFullYear() + 1, from.getMonth(), from.getDate());
+      }
+      const daysToBirthday = Math.round((next - to) / dayMs);
+      const birthdayText = daysToBirthday === 0 ? "Today! Happy birthday!" : fmtNum(daysToBirthday) + " days";
+
+      table.innerHTML =
+        "<tr><th>Result</th><th>Value</th></tr>" +
+        "<tr><td>Your age</td><td>" + years + " years, " + months + " months, " + days + " days</td></tr>" +
+        "<tr><td>Total months</td><td>" + fmtNum(totalMonths) + "</td></tr>" +
+        "<tr><td>Total weeks</td><td>" + fmtNum(totalWeeks) + "</td></tr>" +
+        "<tr><td>Total days</td><td>" + fmtNum(totalDays) + "</td></tr>" +
+        "<tr><td>Next birthday in</td><td>" + birthdayText + "</td></tr>";
+    }
+  </script>
+</body>
+</html>
